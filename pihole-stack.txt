@@ -1,0 +1,47 @@
+# More info at https://github.com/pi-hole/docker-pi-hole/ 
+# and https://docs.pi-hole.net/
+# https://github.com/pi-hole/docker-pi-hole/releases
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole@sha256:1c32c36b862a12762656b6471c854cebc01fe945639ba3a893611337c2c95e99 #2026.04.1
+    ports:
+      # DNS Ports
+      - "53:53/tcp"
+      - "53:53/udp"
+      # Default HTTP Port
+      #- "80:80/tcp"
+      # Default HTTPs Port. FTL will generate a self-signed certificate
+      - "10001:443/tcp"
+    environment:
+      # Set the appropriate timezone for your location from
+      # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones, e.g:
+      TZ: 'Europe/Berlin'
+      # If using Docker's default `bridge` network setting the dns listening mode should be set to 'ALL'
+      FTLCONF_dns_listeningMode: 'ALL'
+      FTLCONF_dns_upstreams: unbound#5335
+    # Volumes store your data between container upgrades
+    volumes:
+      # For persisting Pi-hole's databases and common configuration file
+      - './etc-pihole:/etc/pihole'
+    cap_add:
+      # See https://docs.pi-hole.net/docker/configuration/#note-on-capabilities
+      # Required if you are using Pi-hole as your DHCP server, else not needed
+      #- NET_ADMIN
+      # Required if you are using Pi-hole as your NTP client to be able to set the host's system time
+      - SYS_TIME
+      # Optional, if Pi-hole should get some more processing time
+      - SYS_NICE
+    extra_hosts:
+      - "unbound:172.19.0.1"
+    restart: unless-stopped
+    networks:
+      pinet:
+        ipv4_address: 172.19.0.2
+networks:
+  pinet:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.19.0.0/24
+         gateway: 172.19.0.1
