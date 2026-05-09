@@ -24,8 +24,6 @@ services:
     container_name: nextcloud-app
     image: nextcloud@sha256:90a730e9a3dd290d9626ca64740c4d2fa901b4f231fe4ab6eb0dcf300dbc7271 #33.0.3-apache
     restart: always
-    ports:
-      - 10002:80
     volumes:
       - nextcloud:/var/www/html
     environment:

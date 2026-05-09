@@ -1,13 +1,13 @@
 services:
   web:
-    image: nginx
+    container_name: nginx-web
+    image: nginx@sha256:2fb5d772cea6ef1a8dab525df1b9485289eee167d26af9613fce27a12c060caa #1.30.0-alpine-slim
     volumes:
       - ./templates:/etc/nginx/templates
+      - ./ssl:/ssl
     ports:
       - "80:80"
-    environment:
-      - NGINX_HOST=pi5.pws9.local
-      - NGINX_PORT=80
+      - "443:443"
     networks:
       - pinet
       - ncnet
