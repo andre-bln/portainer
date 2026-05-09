@@ -1,0 +1,60 @@
+volumes:
+  nextcloud:
+  db:
+
+services:
+  db:
+    container_name: nextcloud-db
+    image: postgres@sha256:54451ecb8ab38c24c3ec123f2fd501303a3a1856a5c66e98cecf2460d5e1e9d7 #18.3-alpine3.23
+    restart: always
+    volumes:
+      - db:/var/lib/postgresql
+    environment:
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    networks:
+      ncnet:
+        ipv4_address: 172.18.0.2
+  app:
+    container_name: nextcloud-app
+    image: nextcloud@sha256:90a730e9a3dd290d9626ca64740c4d2fa901b4f231fe4ab6eb0dcf300dbc7271 #33.0.3-apache
+    restart: always
+    ports:
+      - 10002:80
+    volumes:
+      - nextcloud:/var/www/html
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB_FILE=/run/secrets/postgres_db
+      - POSTGRES_USER_FILE=/run/secrets/postgres_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+    depends_on:
+      - db
+    secrets:
+      - postgres_db
+      - postgres_password
+      - postgres_user
+    networks:
+      ncnet:
+        ipv4_address: 172.18.0.3
+secrets:
+  postgres_db:
+    file: /data/compose/nextcloud-config/postgres_db.txt # put postgresql db name in this file
+  postgres_password:
+    file: /data/compose/nextcloud-config/postgres_password.txt # put postgresql password in this file
+  postgres_user:
+    file: /data/compose/nextcloud-config/postgres_user.txt # put postgresql username in this file
+
+networks:
+  ncnet:
+    name: ncnet
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.18.0.0/24
+         gateway: 172.18.0.1
