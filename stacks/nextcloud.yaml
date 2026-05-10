@@ -3,6 +3,14 @@ volumes:
   db:
 
 services:
+  redis:
+    container_name: nextcloud-redis
+    image: redis@sha256:d146f83b1e0f02fc27c26a50cee39338c736674c5959db84363e6ae3cd9e02d2 #8.6.3-alpine3.23
+    restart: always
+    command: redis-server
+    networks:
+      ncnet:
+        ipv4_address: 172.18.0.5
   db:
     container_name: nextcloud-db
     image: postgres@sha256:54451ecb8ab38c24c3ec123f2fd501303a3a1856a5c66e98cecf2460d5e1e9d7 #18.3-alpine3.23
@@ -31,8 +39,11 @@ services:
       - POSTGRES_DB_FILE=/run/secrets/postgres_db
       - POSTGRES_USER_FILE=/run/secrets/postgres_user
       - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     depends_on:
       - db
+      - redis
     secrets:
       - postgres_db
       - postgres_password
@@ -40,6 +51,8 @@ services:
     networks:
       ncnet:
         ipv4_address: 172.18.0.3
+    links:
+      - redis
 secrets:
   postgres_db:
     file: /data/compose/nextcloud-config/postgres_db.txt # put postgresql db name in this file
