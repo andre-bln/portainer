@@ -13,3 +13,13 @@ services:
     network_mode: host
     environment:
       TZ: Europe/Berlin
+  matterjs-server:
+    container_name: matterjs-server
+    image: ghcr.io/matter-js/matterjs-server@sha256:1935c641893cf25f0337dd1aa02af9ae0fa22fb50fe7fa274b4519adb2bb028b #0.7.1
+    ports:
+      - "5580:5580"
+    read_only: true
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - "./matterjs-server:/data"
