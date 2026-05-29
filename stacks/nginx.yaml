@@ -10,10 +10,13 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      - pinet
-      - ncnet
+      pinet:
+        ipv4_address: 172.19.0.100
+      ncnet:
+        ipv4_address: 172.18.0.100
     extra_hosts:
       - "docker.host:172.18.0.1"
+    restart: unless-stopped
 networks:
   pinet:
     external: true
