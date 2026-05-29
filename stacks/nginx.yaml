@@ -11,6 +11,8 @@ services:
     networks:
       - pinet
       - ncnet
+    extra_hosts:
+      - "docker.host:172.18.0.1"
 networks:
   pinet:
     external: true
