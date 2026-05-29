@@ -1,10 +1,11 @@
 services:
   web:
     container_name: nginx-web
-    image: nginx@sha256:2fb5d772cea6ef1a8dab525df1b9485289eee167d26af9613fce27a12c060caa #1.30.0-alpine-slim
+    image: nginx@sha256:3fe7a344f234ac4b84817896c9294ffae74eae03fc1ad0ff502457fef5cebef8 #1.31.1-alpine-slim
     volumes:
       - ./templates:/etc/nginx/templates
       - ./ssl:/ssl
+      - ./house-site:/usr/share/nginx/html
     ports:
       - "80:80"
       - "443:443"
