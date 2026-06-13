@@ -15,7 +15,7 @@ services:
       TZ: Europe/Berlin
   matterjs-server:
     container_name: matterjs-server
-    image: ghcr.io/matter-js/matterjs-server@sha256:1935c641893cf25f0337dd1aa02af9ae0fa22fb50fe7fa274b4519adb2bb028b #0.7.1
+    image: ghcr.io/matter-js/matterjs-server@sha256:504813d276d6b09e88b169b3917bf2551c5b90cecbf3e85c4b856935b09f4ac5 #1.0.0
     ports:
       - "5580:5580"
     read_only: true
