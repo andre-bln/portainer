@@ -16,6 +16,8 @@ services:
   matterjs-server:
     container_name: matterjs-server
     image: ghcr.io/matter-js/matterjs-server@sha256:504813d276d6b09e88b169b3917bf2551c5b90cecbf3e85c4b856935b09f4ac5 #1.0.0
+    environment:
+      - PRODUCTION_MODE=true
     ports:
       - "5580:5580"
     read_only: true

@@ -6,6 +6,8 @@ services:
       - ./templates:/etc/nginx/templates
       - ./ssl:/ssl
       - ./house-site:/usr/share/nginx/html
+    environment:
+      - TZ=Europe/Berlin
     ports:
       - "80:80"
       - "443:443"
