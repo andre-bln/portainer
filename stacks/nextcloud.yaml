@@ -51,6 +51,8 @@ services:
     networks:
       ncnet:
         ipv4_address: 172.18.0.3
+    dns:
+      - 192.168.178.57
     links:
       - redis
       
@@ -62,11 +64,13 @@ services:
       - JWT_SECRET=s4cretDA34j5fgsfg
       - USE_UNAUTHORIZED_STORAGE=true
     volumes:
-      - ./oods_data:/var/www/onlyoffice/Data
+      - ./oods_data:/var/www/onlyoffice/Data‚
       - ./oods_log:/var/log/onlyoffice
     networks:
       ncnet:
         ipv4_address: 172.18.0.6
+    dns:
+      - 192.168.178.57
       
 secrets:
   postgres_db:
