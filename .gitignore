@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# macOS metadata in folders
+._*
+.Spotlight-V100
+.Trashes
+Icon?
