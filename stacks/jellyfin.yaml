@@ -1,0 +1,48 @@
+services:
+  jellyfin:
+    image: jellyfin/jellyfin@sha256:aefb67e6a7ff1debdd154a78a7bbb780fd0c873d8639210a7f6a2016ad2b35db #10.11.11
+    container_name: jellyfin
+    ports:
+      - 8096:8096/tcp
+      - 7359:7359/udp
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - type: bind
+        source: ./media
+        target: /media/other
+      - type: bind
+        source: /mnt/extHdd/media/home
+        target: /media/home
+        read_only: true
+      - type: bind
+        source: /mnt/extHdd/media/tv
+        target: /media/tv
+        read_only: true
+      - type: bind
+        source: /mnt/extHdd/media/movies
+        target: /media/movies
+        read_only: true
+      - type: bind
+        source: /mnt/extHdd/media/music
+        target: /media/music
+        read_only: true
+    restart: 'unless-stopped'
+    # Optional - alternative address used for autodiscovery
+    environment:
+      - JELLYFIN_PublishedServerUrl=https://jelly.pws9.local
+    # Optional - may be necessary for docker healthcheck to pass if running in host network mode
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    networks:
+      jellynet:
+        ipv4_address: 172.21.0.2
+
+networks:
+  jellynet:
+    name: jellynet
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 172.21.0.0/24
+         gateway: 172.21.0.1

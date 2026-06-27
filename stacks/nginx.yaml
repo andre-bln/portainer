@@ -16,6 +16,8 @@ services:
         ipv4_address: 172.19.0.100
       ncnet:
         ipv4_address: 172.18.0.100
+      jellynet:
+        ipv4_address: 172.21.0.100
     dns:
       - 192.168.178.57
     extra_hosts:
@@ -28,3 +30,6 @@ networks:
   ncnet:
     external: true
     name: ncnet
+  jellynet:
+    external: true
+    name: jellynet
